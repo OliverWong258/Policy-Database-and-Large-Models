@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Policy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +20,7 @@ public class PolicyService {
      */
     public List<Policy> searchPolicies(String keywords, String department, LocalDate publishDate) {
         // 实现搜索逻辑
+        return new ArrayList<>(); // 占位的空列表
     }
     
 }

@@ -14,6 +14,7 @@ public class ReportService {
      */
     public Message generateReport(Message reportContent) {
         // 实现Word文档生成逻辑
+        return new Message();
     }
 }
 

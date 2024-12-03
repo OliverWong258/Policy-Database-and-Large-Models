@@ -12,7 +12,7 @@ spring:
 #    用户名
     username: root
 #    密码
-    password: sam020925
+    password: 123456
     
 mybatis:
   configuration:

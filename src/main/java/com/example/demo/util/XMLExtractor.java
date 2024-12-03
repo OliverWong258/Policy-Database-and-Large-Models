@@ -4,6 +4,7 @@ import com.example.demo.entity.Policy;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,14 +16,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.json.JSONArray;
 
 public class XMLExtractor {
     private File inputFile;
     private static XMLExtractor instance;
+    private static Set<String> validAgencies = new HashSet<>(); // 插入数据到表格
+    static{
+        validAgencies.add("bureau of industry and security");
+        validAgencies.add("department of the treasury");
+        validAgencies.add("department of state");
+        validAgencies.add("department of justice");
+    }
 
     private XMLExtractor(){
         if (instance != null) {
@@ -77,8 +82,24 @@ public class XMLExtractor {
         }
         return null;
     }
-    
+
+    private static String nodeToString(Element node) {
+        try {
+            javax.xml.transform.Transformer transformer = javax.xml.transform.TransformerFactory.newInstance().newTransformer();
+            javax.xml.transform.dom.DOMSource source = new javax.xml.transform.dom.DOMSource(node);
+            java.io.StringWriter writer = new java.io.StringWriter();
+            javax.xml.transform.stream.StreamResult result = new javax.xml.transform.stream.StreamResult(writer);
+            transformer.transform(source, result);
+            return writer.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private List<Policy> generatePolicies(String type, NodeList nodeList, String date, String dayOfWeek, Set<String> validAgencies){
+        List<Policy> policyList = new ArrayList<>();
+
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element parentElement = (Element) nodeList.item(i);// 获取全文信息
             NodeList items = parentElement.getElementsByTagName(type.toUpperCase());
@@ -121,22 +142,23 @@ public class XMLExtractor {
                         summary = summaryBuilder.toString().trim();
                     }// 获取摘要
 
-                    pstmt.setString(1, type);
-                    pstmt.setString(2, date);
-                    pstmt.setString(3, dayOfWeek);
-                    pstmt.setString(4, agency != null ? agency : "0");
-                    pstmt.setString(5, subagency != null ? subagency : "0");
-                    pstmt.setString(6, subjectJson.length() > 0 ? subjectJson.toString() : "0");
-                    pstmt.setString(7, cfr != null ? cfr : "0");
-                    pstmt.setString(8, depdoc != null ? depdoc : "0");
-                    pstmt.setString(9, frdoc != null ? frdoc : "0");
-                    pstmt.setString(10, bilcod != null ? bilcod : "0");
-                    pstmt.setString(11, summary.length() > 0 ? summary : "0");
-                    pstmt.setString(12, nodeToString(element));
-                    pstmt.executeUpdate();
+                    agency = (agency != null) ? agency : "0";
+                    subagency = (subagency != null) ? subagency : "0";
+                    String subjectStr = (subjectJson.length() > 0) ? subjectJson.toString() : "0";
+                    cfr = (cfr != null) ? cfr : "0";
+                    depdoc = (depdoc != null) ? depdoc : "0";
+                    frdoc = (frdoc != null) ? frdoc : "0";
+                    bilcod = (bilcod != null) ? bilcod : "0";
+                    summary = (summary.length() > 0) ? summary : "0";
+                    String contentStr = nodeToString(element);
+
+                    policyList.add(new Policy(null, type, date, dayOfWeek, agency, subagency, 
+                               subjectStr, cfr, depdoc, frdoc, bilcod, summary, contentStr));
                 }
             }
         }
+
+        return policyList;
     }
 
     public List<Policy> extractPolicy(){
@@ -161,12 +183,18 @@ public class XMLExtractor {
             NodeList prorulesList = fedreg.getElementsByTagName("PRORULES");
             NodeList noticesList = fedreg.getElementsByTagName("NOTICES");
 
+            List<Policy> ruleList = generatePolicies("rule", rulesList, dateSQL, dayOfWeek, validAgencies);
+            List<Policy> proruleList = generatePolicies("prorule", prorulesList, dateSQL, dayOfWeek, validAgencies);
+            List<Policy> noticeList = generatePolicies("notice", noticesList, dateSQL, dayOfWeek, validAgencies);
 
-
+            return new ArrayList<Policy>(){{
+                addAll(ruleList);
+                addAll(proruleList);
+                addAll(noticeList);
+            }};
         }catch (Exception e) {
             e.printStackTrace();
+            return new ArrayList<Policy>();
         }
     }
-
-
 }

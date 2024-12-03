@@ -1,20 +1,14 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Message;
-import com.example.demo.util.InformationRetriever;
-import com.example.demo.util.LargeModelAPI;
+//import com.example.demo.util.InformationRetriever;
+//import com.example.demo.util.LargeModelAPI;
 
 @Service
 public class QnAService {
-
-    @Autowired
-    private LargeModelAPI largeModelAPI;
-
-    @Autowired
-    private InformationRetriever informationRetriever;
 
     /**
      * 处理用户的政策问答请求
@@ -23,6 +17,7 @@ public class QnAService {
      */
     public Message processPolicyQuestion(Message question) {
         // 解析问题，检索信息，调用大模型生成回答
+        return new Message();
     }
 }
 
