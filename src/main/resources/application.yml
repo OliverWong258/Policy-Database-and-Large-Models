@@ -1,0 +1,22 @@
+server:
+  # springboot工程默认运行端口
+  port: 8080
+
+spring:
+  datasource:
+#    驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    数据库地址
+    # url: jdbc:mysql://localhost:3306/mybatis # 可以简写为这个，其中mybatis是数据库名称
+    url: jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+#    用户名
+    username: root
+#    密码
+    password: sam020925
+    
+mybatis:
+  configuration:
+    # 指定mybatis日志输出到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl 
+    # 驼峰命名
+    map-underscore-to-camel-case: true
