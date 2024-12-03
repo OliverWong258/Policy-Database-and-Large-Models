@@ -31,9 +31,3 @@ This project uses several key dependencies:
 
 6. **JSON**:
    - `json`: To handle JSON operations in the project.
-
-### How to Run the Project
-
-1. **Clone the repository**:
-   ```bash
-   git clone <your-repository-url>
