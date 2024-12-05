@@ -11,6 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.text.SimpleDateFormat;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.sql.Date;
 
 @SpringBootTest
 @Sql(scripts = "/schema.sql")  // 加载 schema.sql 脚本
@@ -48,6 +53,27 @@ public class PolicyMapperTest {
                 e.printStackTrace();
                 System.out.println(policy.getDate());
             }
+        }
+    }
+
+    // 测试根据关键词、部门、日期搜索政策
+    @Test
+    public void testSearchPolicies_WithAllParameters() {
+        try{
+            String keywords = "eCollection";
+            String department = "";
+            SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd"); 
+            java.util.Date date = sdf.parse("2024-01-02");  
+            Date publishDate = new Date(date.getTime());
+            List<Policy> policies = policyMapper.searchPolicies(keywords, department, publishDate);
+            assertNotNull(policies);
+            for (Policy policy : policies) {
+                System.out.println();
+                System.out.println(policy);
+                System.out.println();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

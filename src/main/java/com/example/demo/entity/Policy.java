@@ -24,19 +24,19 @@ public class Policy {
 
     @Override
     public String toString() {
-        return "Document{" +
-                "type='" + type + '\'' +
+        return "Policy{" +
+                //"type='" + type + '\'' +
                 ", date='" + date + '\'' +
-                ", dayOfWeek='" + dayOfTheWeek + '\'' +
+                //", dayOfWeek='" + dayOfTheWeek + '\'' +
                 ", agency='" + agency + '\'' +
-                ", subagency='" + subagency + '\'' +
-                ", subject='" + subjectJson + '\'' +
-                ", cfr='" + cfr + '\'' +
-                ", depdoc='" + depdoc + '\'' +
-                ", frdoc='" + frdoc + '\'' +
-                ", bilcod='" + bilcod + '\'' +
+                //", subagency='" + subagency + '\'' +
+                //", subject='" + subjectJson + '\'' +
+                //", cfr='" + cfr + '\'' +
+                //", depdoc='" + depdoc + '\'' +
+                //", frdoc='" + frdoc + '\'' +
+                //", bilcod='" + bilcod + '\'' +
                 ", summary='" + summary + '\'' +
-                ", content='" + content + '\'' +
+                //", content='" + content + '\'' +
                 '}';
     }
 }

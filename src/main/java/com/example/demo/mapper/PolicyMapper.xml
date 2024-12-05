@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.PolicyMapper">
+
+    <!-- 动态查询政策 -->
+    <select id="searchPolicies" resultType="com.example.demo.entity.Policy">
+        SELECT * FROM policies
+        WHERE 1=1
+        <!-- 如果关键词不为空，添加关键词条件 -->
+        <if test="keywords != null and keywords != ''">
+            AND JSON_SEARCH(subject, 'one', CONCAT('%', #{keywords}, '%')) IS NOT NULL
+        </if>
+        <!-- 如果部门不为空，添加部门条件 -->
+        <if test="department != null and department != ''">
+            AND agency = #{department}
+        </if>
+        <!-- 如果发布日期不为空，添加发布日期条件 -->
+        <if test="publishDate != null">
+            AND date = #{publishDate}
+        </if>
+    </select>
+
+</mapper>

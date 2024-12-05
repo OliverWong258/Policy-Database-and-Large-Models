@@ -1,15 +1,20 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Policy;
+import com.example.demo.mapper.PolicyMapper;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.sql.Date;
 
 @Service
 public class PolicyService {
+
+    @Autowired
+    private PolicyMapper policyMapper;
 
     /**
      * 根据查询条件搜索政策
@@ -19,8 +24,8 @@ public class PolicyService {
      * @return 政策列表
      */
     public List<Policy> searchPolicies(String keywords, String department, LocalDate publishDate) {
-        // 实现搜索逻辑
-        return new ArrayList<>(); // 占位的空列表
+        Date date = publishDate != null ? Date.valueOf(publishDate) : null;
+        return policyMapper.searchPolicies(keywords, department, date);
     }
     
 }
