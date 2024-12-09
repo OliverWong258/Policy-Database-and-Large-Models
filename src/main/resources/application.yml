@@ -1,6 +1,8 @@
 server:
   # springboot工程默认运行端口
   port: 8080
+  # 绑定到所有外部接口
+  address: 0.0.0.0
 
 spring:
   datasource:
@@ -17,6 +19,6 @@ spring:
 mybatis:
   configuration:
     # 指定mybatis日志输出到控制台
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl 
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl 
     # 驼峰命名
     map-underscore-to-camel-case: true
