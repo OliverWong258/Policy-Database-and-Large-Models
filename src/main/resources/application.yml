@@ -15,6 +15,8 @@ spring:
     username: root
 #    密码
     password: 123456
+  thymeleaf:
+    check-template-location: false
     
 mybatis:
   configuration:
@@ -22,3 +24,8 @@ mybatis:
     # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl 
     # 驼峰命名
     map-underscore-to-camel-case: true
+
+app:
+  xml:
+    storage:
+      path: "XMLFiles/"

@@ -2,7 +2,6 @@ package com.example.demo.util;
 
 import com.example.demo.entity.Policy;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,9 +16,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.json.JSONArray;
+import org.xml.sax.InputSource;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.io.ByteArrayInputStream;
 
 public class XMLExtractor {
-    private File inputFile;
+    private String inputFile;
     private static XMLExtractor instance;
     private static Set<String> validAgencies = new HashSet<>(); // 插入数据到表格
     static{
@@ -39,7 +43,7 @@ public class XMLExtractor {
         if (instance == null) {
             instance = new XMLExtractor();
         }
-        instance.inputFile = new File(inputFilePath);
+        instance.inputFile = inputFilePath;
         return instance;
     }
 
@@ -165,10 +169,26 @@ public class XMLExtractor {
 
     public List<Policy> extractPolicy(){
         try {
+            // 预处理xml文件，将所有非UTF-8字符替换为空格
+            // 1. 将文件内容读入字符串
+            String content = new String(Files.readAllBytes(Paths.get(inputFile)), StandardCharsets.UTF_8);
+
+            // 2. 使用正则表达式过滤非法字符为单个空格
+            //    [^\p{Print}] 匹配所有不可打印字符，你可以根据需要调整此正则
+            content = content.replaceAll("[^\\p{Print}]", " ");
+            
+            // 将连续的空格合并为一个空格
+            content = content.replaceAll(" +", " ");
+            
+            // 3. 将清洗后的字符串转为输入流
+            ByteArrayInputStream bais = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+
+
+
             // 解析XML文件
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(inputFile);
+            Document doc = dBuilder.parse(new InputSource(bais));
             doc.getDocumentElement().normalize();
 
             // 进入<FEDREG>标签（大标签）
@@ -189,6 +209,7 @@ public class XMLExtractor {
             List<Policy> proruleList = generatePolicies("prorule", prorulesList, dateSQL, dayOfWeek, validAgencies);
             List<Policy> noticeList = generatePolicies("notice", noticesList, dateSQL, dayOfWeek, validAgencies);
 
+            System.out.println("XML提取成功");
             return new ArrayList<Policy>(){{
                 addAll(ruleList);
                 addAll(proruleList);
