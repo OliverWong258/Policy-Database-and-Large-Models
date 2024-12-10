@@ -4,8 +4,8 @@ import com.example.demo.entity.Policy;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -69,7 +69,7 @@ public class XMLExtractor {
 
         SimpleDateFormat inputFormat = new SimpleDateFormat("MM dd, yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = inputFormat.parse(dateFormatted);
+        java.util.Date date = inputFormat.parse(dateFormatted);
         String dateSQL = outputFormat.format(date);
 
         return new String[]{dayOfWeek, dateSQL};
@@ -151,8 +151,10 @@ public class XMLExtractor {
                     bilcod = (bilcod != null) ? bilcod : "0";
                     summary = (summary.length() > 0) ? summary : "0";
                     String contentStr = nodeToString(element);
+                    LocalDate localDate = LocalDate.parse(date);
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
 
-                    policyList.add(new Policy(null, type, date, dayOfWeek, agency, subagency, 
+                    policyList.add(new Policy(null, type, sqlDate, dayOfWeek, agency, subagency, 
                                subjectStr, cfr, depdoc, frdoc, bilcod, summary, contentStr));
                 }
             }

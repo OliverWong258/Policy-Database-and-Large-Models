@@ -20,7 +20,7 @@ public interface PolicyMapper {
             "VALUES (#{type}, #{date}, #{dayOfWeek}, #{agency}, #{subagency}, #{subjectJson}, #{cfr}, #{depdoc}, #{frdoc}, #{bilcod}, #{summary}, #{content})")
     void insertDocument(
             @Param("type") String type,
-            @Param("date") String date,
+            @Param("date") Date date,
             @Param("dayOfWeek") String dayOfWeek,
             @Param("agency") String agency,
             @Param("subagency") String subagency,

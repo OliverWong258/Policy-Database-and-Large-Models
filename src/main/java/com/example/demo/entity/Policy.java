@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Policy {
     private Integer id;               // 政策ID
     private String type;              // 类型
-    private String date;           // 日期
+    private Date date;                // 日期
     private String dayOfTheWeek;      // 星期几
     private String agency;            // 机构
     private String subagency;         // 子机构

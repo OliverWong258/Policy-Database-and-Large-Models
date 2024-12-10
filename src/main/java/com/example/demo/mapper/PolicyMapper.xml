@@ -14,7 +14,7 @@
         </if>
         <!-- 如果部门不为空，添加部门条件 -->
         <if test="department != null and department != ''">
-            AND agency = #{department}
+            AND (agency = #{department} OR subagency = #{department})
         </if>
         <!-- 如果发布日期不为空，添加发布日期条件 -->
         <if test="publishDate != null">

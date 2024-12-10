@@ -19,7 +19,7 @@ public class PolicyControllerTest {
     @Test
     public void testSearchPolicies_API() throws Exception {
         mockMvc.perform(get("/api/policies/search")
-                .param("keywords", "china"))
+                .param("keywords", "child"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
