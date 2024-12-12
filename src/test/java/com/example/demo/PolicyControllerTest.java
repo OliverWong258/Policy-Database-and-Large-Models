@@ -19,7 +19,9 @@ public class PolicyControllerTest {
     @Test
     public void testSearchPolicies_API() throws Exception {
         mockMvc.perform(get("/api/policies/search")
-                .param("keywords", "child"))
+                .param("keywords", "tech")
+                .param("department", "comm")
+                .param("publishDate", "2024-12-10"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());

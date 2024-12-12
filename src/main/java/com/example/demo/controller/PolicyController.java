@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 
 import com.example.demo.entity.Policy;
@@ -24,12 +25,15 @@ public class PolicyController {
      * @return 政策列表
      */
     @GetMapping("/search")
-    public List<Policy> searchPolicies(
+    public ResponseEntity<List<Policy>> searchPolicies(
             @RequestParam(required = false) String keywords,
             @RequestParam(required = false) String department,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishDate) {
+                System.out.println(String.format("keywords: %s, department: %s", 
+                keywords, department));
+        
         // 调用业务逻辑层方法
-        return policyService.searchPolicies(keywords, department, publishDate);
+        return ResponseEntity.ok(policyService.searchPolicies(keywords, department, publishDate));
     }
 
 }

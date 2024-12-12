@@ -25,7 +25,16 @@ public class PolicyService {
      */
     public List<Policy> searchPolicies(String keywords, String department, LocalDate publishDate) {
         Date date = publishDate != null ? Date.valueOf(publishDate) : null;
-        return policyMapper.searchPolicies(keywords, department, date);
+        //return policyMapper.searchPolicies(keywords, department, date);
+        // 调用方法查找政策
+        List<Policy> policies = policyMapper.searchPolicies(keywords, department, date);
+
+        // 如果查找到的政策不为空，则输出 "已找到"
+        if (policies != null && !policies.isEmpty()) {
+            System.out.println("已找到");
+        }
+
+        return policies;
     }
     
 }
